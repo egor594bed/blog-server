@@ -21,7 +21,11 @@ class UserController < ApplicationController
   def create_user
     user = User.create(user_params)
     
-    render json: user
+    if user.persisted?
+      render json: user
+    else
+      render json: user.errors
+    end
   end
   
   def update_user

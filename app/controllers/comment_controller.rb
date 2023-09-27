@@ -5,7 +5,12 @@ class CommentController < ApplicationController
   def create_comment
     comment = Comment.create(post_id: params[:post_id], user_id: params[:user_id], text: params[:text], score: params[:score] || 0)
 
-    render json: comment
+    if comment.persisted?
+      render json: comment
+    else
+      render json: comment.errors
+    end
+
   end
 
   def update_comment

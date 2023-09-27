@@ -9,7 +9,12 @@ class CategoryController < ApplicationController
   def create_category
     category = Category.create(category_params)
 
-    render json: category
+    if category.persisted?
+      render json: category
+    else
+      render json: category.errors
+    end
+    
   end
 
   def update_category

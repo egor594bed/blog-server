@@ -5,7 +5,12 @@ class PostController < ApplicationController
   def create_post 
     post = Post.create(title: params[:title], text: params[:text], user_id: params[:user_id], category_key: params[:key])
 
-    render json: post 
+    if post.persisted?
+      render json: post
+    else
+      render json: post.errors
+    end
+
   end
 
   def update_post
