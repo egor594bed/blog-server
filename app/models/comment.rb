@@ -4,6 +4,7 @@ class Comment < ApplicationRecord
 
   validates :score, numericality: {greater_than_or_equal_to: 0, less_than_or_equal_to: 5}
 
+  # TODO: see counter_cache model benefits
   after_create :increment_post_comments_counter
   after_destroy :decrement_post_comments_counter
 

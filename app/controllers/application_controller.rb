@@ -1,5 +1,7 @@
 class ApplicationController < ActionController::API
   private
+  # TODO: move common private methods into each controller private methods
+  # TODO: method find! that raise exception if not found
   def find_user_by_id
     @user = User.find(params[:id])
   end

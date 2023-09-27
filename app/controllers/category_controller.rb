@@ -6,6 +6,7 @@ class CategoryController < ApplicationController
     render json: categories
   end
 
+  # TODO: naming just :create, :update, :destroy etc
   def create_category
     category = Category.create(category_params)
 
@@ -31,6 +32,7 @@ class CategoryController < ApplicationController
 
   private
 
+  # TODO: params.require(:category).permit(:key, :name, :description)
   def category_params
     params.permit(:key, :name, :description)
   end

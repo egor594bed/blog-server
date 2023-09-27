@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  # TODO: resources
   get '/users', to: 'user#index'
   get '/users/:id', to: 'user#get_user'
   post '/users', to: 'user#create_user'
