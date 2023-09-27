@@ -1,5 +1,5 @@
-class UserController < ApplicationController
-  before_action :find_user_by_id, only: %i[update_user get_user]
+class UsersController < ApplicationController
+  before_action :find_user_by_id, only: %i[update show]
   
   DEFAULT_USERS_ON_PAGE = 10
   def index
@@ -12,44 +12,54 @@ class UserController < ApplicationController
       all_users = all_users.where('created_at >= ?', DateTime.parse(params[:created_at])) if params[:created_at]
       all_users = all_users.where('created_at <= ?', DateTime.parse(params[:created_before])) if params[:created_before]
       
+      offset = (params[:page].to_i - 1) * DEFAULT_USERS_ON_PAGE if params[:page].present?
+      offset ||= 0
       
-      all_users.limit(DEFAULT_USERS_ON_PAGE).offset((params[:page].to_i - 1) * DEFAULT_USERS_ON_PAGE)
+      all_users.limit(DEFAULT_USERS_ON_PAGE).offset((offset) * DEFAULT_USERS_ON_PAGE).order(:id)
 
     end
 
     render json: users
   end
 
-  def get_user
+  def show
     render json: @user, serializer: UserFullDataSerializer
   end
 
-  def create_user
+  def create
     user = User.create(user_params)
     
     if user.persisted?
-      render json: user
+      head :ok
     else
       render json: user.errors
     end
   end
   
-  def update_user
-    user = @user.update(user_params)
+  def update
 
-    render json: user
+    if @user.update!(user_params)
+      render json: user
+    else
+      render json: user.errors
+    end
+
   end
   
-  def delete_user
-    user = User.find(params[:id]).destroy
+  def destroy
+    user = User.find(params[:id]).destroy!
 
-    render json: user
+    head :ok
   end
 
   private
 
   def user_params
-    params.permit(:username)
+    params.require(:user).permit(:username)
+  end
+
+  def find_user_by_id
+    @user = User.find(params[:id])
   end
 
 end

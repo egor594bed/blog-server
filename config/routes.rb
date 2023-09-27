@@ -1,22 +1,23 @@
 Rails.application.routes.draw do
-  # TODO: resources
-  get '/users', to: 'user#index'
-  get '/users/:id', to: 'user#get_user'
-  post '/users', to: 'user#create_user'
-  put '/users/:id', to: 'user#update_user'
-  delete '/users/:id', to: 'user#delete_user'
 
-  post '/categories/:key/posts', to: 'post#create_post'
-  put  '/categories/:key/posts/:post_id', to: 'post#update_post'
-  delete '/categories/:key/posts/:post_id', to: 'post#delete_post'
+  resources :users
+  
+  resources :categories, only: %i[index create]
+  # Если делать через resources, то создается /categories/:id, а не /categories/:key
+  # То же самое с posts
+  put  '/categories/:key', to: 'categories#update'
+  delete '/categories/:key', to: 'categories#destroy'
 
-  post '/categories/:key/posts/:post_id/comments', to: 'comment#create_comment'
-  put  '/categories/:key/posts/:post_id/comments/:id', to: 'comment#update_comment'
-  delete '/categories/:key/posts/:post_id/comments/:id', to: 'comment#delete_comment'
+  scope 'categories/:key' do
 
-  get '/categories', to: 'category#index'
-  post '/categories', to: 'category#create_category'
-  put  '/categories/:key', to: 'category#update_category'
-  delete '/categories/:key', to: 'category#delete_category'
+    resources :posts, only: %i[create]
+    put  '/posts/:post_id', to: 'categories#update'
+    delete '/posts/:post_id', to: 'categories#destroy'
 
+    scope 'posts/:post_id' do
+      resources :comments, only: %i[create update destroy]
+    end
+    
+  end
+  
 end

@@ -1,40 +1,42 @@
-class CategoryController < ApplicationController
-  before_action :find_category_by_key, only: %i[update_category delete_category]
+class CategoriesController < ApplicationController
+  before_action :find_category_by_key, only: %i[update destroy]
   def index
     categories = Category.all
 
     render json: categories
   end
 
-  # TODO: naming just :create, :update, :destroy etc
-  def create_category
+  def create
     category = Category.create(category_params)
 
     if category.persisted?
-      render json: category
+      head :ok
     else
       render json: category.errors
     end
     
   end
 
-  def update_category
-    category = @category.update(category_params)
+  def update
+ 
+    if @category.update(name: params[:name], description: params[:description])
+      render json: category
+    else
+      render json: category.errors
+    end
 
-    render json: category
   end
 
-  def delete_category
-    category = @category.destroy
+  def destroy
+    category = @category.destroy!
 
-    render json: category
+    head :ok
   end
 
   private
 
-  # TODO: params.require(:category).permit(:key, :name, :description)
   def category_params
-    params.permit(:key, :name, :description)
+    params.require(:category).permit(:key, :name, :description)
   end
 end
 

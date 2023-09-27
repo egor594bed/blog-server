@@ -1,33 +1,37 @@
-class PostController < ApplicationController
-  before_action :find_category_by_key, only: %i[update_post delete_post]
-  before_action :find_post_by_id, only: %i[update_post delete_post]
+class PostsController < ApplicationController
+  before_action :find_category_by_key, only: %i[update destroy]
+  before_action :find_post_by_id, only: %i[update destroy]
 
-  def create_post
-    # TODO: method create! that raise exception if not persisted
-    post = Post.create(title: params[:title], text: params[:text], user_id: params[:user_id], category_key: params[:key])
+  def create
+    post = Post.create(post_params)
 
     if post.persisted?
-      render json: post
+      head :ok
     else
       render json: post.errors
     end
 
   end
 
-  def update_post
-    if @post.update(title: params[:title], text: params[:text], user_id: params[:user_id], category_key: params[:key])
+  def update
+    if @post.update(title: params[:title], text: params[:text])
       render json: @post
     else
       render json: @post.errors
     end
   end
 
-  def delete_post
-    post = @post.destroy
+  def destroy
+    post = @post.destroy!
 
-    # TODO: maybe just status :ok, or :no_content?
-    render json: post
+    head :ok
   end
+end
+
+private
+
+def post_params
+  params.require(:post).permit(:title, :text, :user_id, :category_key)
 end
 
 ### Запросы для постов

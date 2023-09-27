@@ -1,13 +1,21 @@
-class CommentController < ApplicationController
-  before_action :find_category_by_key, only: %i[update_comment delete_comment]
-  before_action :find_post_by_id, only: %i[update_comment delete_comment]
+class CommentsController < ApplicationController
+  before_action :find_category_by_key, only: %i[update destroy]
+  before_action :find_post_by_id, only: %i[update destroy]
 
-  def create_comment
-    # TODO: permit necessary params and create like this:
-    #  Comment.create(comment_params)
-    comment = Comment.create(post_id: params[:post_id], user_id: params[:user_id], text: params[:text], score: params[:score] || 0)
+  def create
+    comment = Comment.create(comment_params)
 
-    # TODO: http status codes???
+    if comment.persisted?
+      head :ok
+    else
+      render json: comment.errors
+    end
+
+  end
+
+  def update
+    comment = @post.comments.find(params[:id]).update(text: params[:text], score: params[:score])
+
     if comment.persisted?
       render json: comment
     else
@@ -16,18 +24,17 @@ class CommentController < ApplicationController
 
   end
 
-  def update_comment
-    comment = @post.comments.find(params[:id]).update(text: params[:text], score: params[:score])
+  def destroy
+    comment = @post.comments.find(params[:id]).destroy!
 
-    render json: comment
+    head :ok
   end
 
-  def delete_comment
-    comment = @post.comments.find(params[:id]).destroy
+  private
 
-    render json: comment
+  def comment_params
+    params.require(:comment).permit(:post_id, :user_id, :text, :score)
   end
-
 end
 
 ### Запросы для комментариев
