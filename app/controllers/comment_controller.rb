@@ -3,8 +3,11 @@ class CommentController < ApplicationController
   before_action :find_post_by_id, only: %i[update_comment delete_comment]
 
   def create_comment
+    # TODO: permit necessary params and create like this:
+    #  Comment.create(comment_params)
     comment = Comment.create(post_id: params[:post_id], user_id: params[:user_id], text: params[:text], score: params[:score] || 0)
 
+    # TODO: http status codes???
     if comment.persisted?
       render json: comment
     else

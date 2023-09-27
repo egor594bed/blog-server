@@ -2,7 +2,8 @@ class PostController < ApplicationController
   before_action :find_category_by_key, only: %i[update_post delete_post]
   before_action :find_post_by_id, only: %i[update_post delete_post]
 
-  def create_post 
+  def create_post
+    # TODO: method create! that raise exception if not persisted
     post = Post.create(title: params[:title], text: params[:text], user_id: params[:user_id], category_key: params[:key])
 
     if post.persisted?
@@ -24,6 +25,7 @@ class PostController < ApplicationController
   def delete_post
     post = @post.destroy
 
+    # TODO: maybe just status :ok, or :no_content?
     render json: post
   end
 end
