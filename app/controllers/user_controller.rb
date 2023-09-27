@@ -1,15 +1,21 @@
 class UserController < ApplicationController
   before_action :find_user_by_id, only: %i[update_user get_user]
   
-  DEFAULT_USERS_ON_PAGE = 3
-
+  DEFAULT_USERS_ON_PAGE = 10
   def index
-    users = User.all
+    cache_key = "users/#{params[:page]}/#{params[:created_at]}/#{params[:created_before]}"
+    
+    users = Rails.cache.fetch(cache_key, expires_in: 12.hours) do
 
-    users = users.where('created_at >= ?', DateTime.parse(params[:created_at])) if params[:created_at]
-    users = users.where('created_at <= ?', DateTime.parse(params[:created_before])) if params[:created_before]
+      all_users = User.all
+      
+      all_users = all_users.where('created_at >= ?', DateTime.parse(params[:created_at])) if params[:created_at]
+      all_users = all_users.where('created_at <= ?', DateTime.parse(params[:created_before])) if params[:created_before]
+      
+      
+      all_users.limit(DEFAULT_USERS_ON_PAGE).offset((params[:page].to_i - 1) * DEFAULT_USERS_ON_PAGE)
 
-    users = users.limit(DEFAULT_USERS_ON_PAGE).offset((params[:page].to_i - 1) * DEFAULT_USERS_ON_PAGE)
+    end
 
     render json: users
   end
