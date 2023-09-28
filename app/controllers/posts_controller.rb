@@ -5,12 +5,16 @@ class PostsController < ApplicationController
   def create
     post = Post.create(post_params)
 
+    if params[:image]
+      post.image.attach(params[:image])
+      post.update(image_url: rails_blob_path(post.image))
+    end
+    
     if post.persisted?
       head :ok
     else
       render json: post.errors
     end
-
   end
 
   def update
@@ -31,7 +35,7 @@ end
 private
 
 def post_params
-  params.require(:post).permit(:title, :text, :user_id, :category_key)
+  params.permit(:title, :text, :user_id, :category_key)
 end
 
 ### Запросы для постов
