@@ -39,13 +39,3 @@ class CategoriesController < ApplicationController
     params.require(:category).permit(:key, :name, :description)
   end
 end
-
-### Запросы для категорий
-# * GET /categories - получить список доступных категорий постов
-# * POST /categories - создать новую категорию
-# * PUT /categories/:id - изменить информацию о конкретной категории
-# * DELETE /categories/:id - удалить конкретную категорию
-# get '/categories', to: 'category#index'
-# post '/categories', to: 'category#create_category'
-# put  '/categories/:key', to: 'category#update_category'
-# delete '/categories/:key', to: 'category#delete_category'

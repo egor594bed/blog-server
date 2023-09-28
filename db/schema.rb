@@ -63,7 +63,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_28_122734) do
     t.string "text"
     t.integer "user_id"
     t.string "category_key"
-    t.integer "comments_counter", default: 0
+    t.integer "comments_count", default: 0
     t.string "image_url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -71,7 +71,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_28_122734) do
 
   create_table "users", force: :cascade do |t|
     t.string "username"
-    t.integer "posts_counter", default: 0
+    t.integer "posts_count", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

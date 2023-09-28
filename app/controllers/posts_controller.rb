@@ -37,12 +37,3 @@ private
 def post_params
   params.permit(:title, :text, :user_id, :category_key)
 end
-
-### Запросы для постов
-# * POST /categories/:key/posts - создать новый пост
-# * PUT /categories/:key/posts/:post_id - изменить информацию о конкретном посте
-# * DELETE /categories/:key/posts/:post_id - удалить конкретный пост
-
-# post '/categories/:key/posts', to: 'post#create_post'
-# put  '/categories/:key/posts/:post_id', to: 'post#update_post'
-# delete '/categories/:key/posts/:post_id', to: 'post#delete_post'

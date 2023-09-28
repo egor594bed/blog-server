@@ -36,11 +36,3 @@ class CommentsController < ApplicationController
     params.require(:comment).permit(:post_id, :user_id, :text, :score)
   end
 end
-
-### Запросы для комментариев
-# * POST /categories/:key/posts/:post_id/comments - создать новый комментарий
-# * PUT /categories/:key/posts/:post_id/comments/:id - изменить информацию о конкретном комментарии
-# * DELETE /categories/:key/posts/:post_id/comments/:id - удалить конкретный комментарий
-# post '/categories/:key/posts/:post_id/comments', to: 'comment#create_comment'
-# put  '/categories/:key/posts/:post_id/comments/:id', to: 'comment#update_comment'
-# delete '/categories/:key/posts/:post_id/comments/:id', to: 'comment#delete_comment'
