@@ -15,7 +15,6 @@ RSpec.describe CommentsController, type: :controller do
     end
   end
 
-  # No route matches
   describe 'PUT #update' do
     subject { put :update, params: { key: category.key, post_id: post.id, id: comment.id, comment: attributes_for(:comment) } }
 
