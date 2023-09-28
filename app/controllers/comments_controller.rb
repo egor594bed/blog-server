@@ -17,11 +17,10 @@ class CommentsController < ApplicationController
     comment = @post.comments.find(params[:id]).update(text: params[:text], score: params[:score])
 
     if comment
-      render json: comment
+      head :ok
     else
-      render json: comment.errors
+      head :bad_request
     end
-
   end
 
   def destroy
