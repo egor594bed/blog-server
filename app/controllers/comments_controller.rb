@@ -16,7 +16,7 @@ class CommentsController < ApplicationController
   def update
     comment = @post.comments.find(params[:id]).update(text: params[:text], score: params[:score])
 
-    if comment.persisted?
+    if comment
       render json: comment
     else
       render json: comment.errors

@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :find_user_by_id, only: %i[update show]
+  before_action :find_user_by_id, only: %i[update show destroy]
   
   DEFAULT_USERS_ON_PAGE = 10
   def index
@@ -38,16 +38,16 @@ class UsersController < ApplicationController
   
   def update
 
-    if @user.update!(user_params)
-      render json: user
+    if @user.update(user_params)
+      render json: @user
     else
-      render json: user.errors
+      render json: @user.errors
     end
 
   end
   
   def destroy
-    user = User.find(params[:id]).destroy!
+    @user.destroy!
 
     head :ok
   end
@@ -60,6 +60,8 @@ class UsersController < ApplicationController
 
   def find_user_by_id
     @user = User.find(params[:id])
+
+    status :not_found unless @user
   end
 
 end

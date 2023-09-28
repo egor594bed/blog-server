@@ -11,8 +11,8 @@ Rails.application.routes.draw do
   scope 'categories/:key' do
 
     resources :posts, only: %i[create]
-    put  '/posts/:post_id', to: 'categories#update'
-    delete '/posts/:post_id', to: 'categories#destroy'
+    put  '/posts/:post_id', to: 'posts#update'
+    delete '/posts/:post_id', to: 'posts#destroy'
 
     scope 'posts/:post_id' do
       resources :comments, only: %i[create update destroy]

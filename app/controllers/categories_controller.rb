@@ -20,9 +20,9 @@ class CategoriesController < ApplicationController
   def update
  
     if @category.update(name: params[:name], description: params[:description])
-      render json: category
+      render json: @category
     else
-      render json: category.errors
+      render json: @category.errors
     end
 
   end
